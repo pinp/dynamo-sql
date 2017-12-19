@@ -6,7 +6,7 @@
 
 本项目（dynamo-sql）对 AWS dynamoDB 做封装，提供类 SQL 语法实现常规数据库操作。
 
-我们封装 DSL（Domain Specific Language）脚本层是为了达成两个目标，一是简化应用，二是方便跨厂商、跨系统移植。
+我们封装该 DSL（Domain Specific Language）脚本层是希望达成两个目标，一是简化开发，二是方便跨厂商、跨系统移植代码。
 
 &nbsp;
 
