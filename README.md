@@ -1,4 +1,4 @@
-[查看中文版](README_zh.md)
+[（查看中文版 View in Chinese）](README_zh.md)
 
 &nbsp;
 
