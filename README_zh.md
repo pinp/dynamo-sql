@@ -1,4 +1,4 @@
-[View in English](README.md)
+[（View in English）](README.md)
 
 &nbsp;
 
@@ -14,7 +14,7 @@ dynamo-sql 支持 6 操作命令，包括：GET、PUT、UPDATE、DELETE、SELECT
 
 各种操作的使用规则如下：
 
-1）GET，用 WHEN 子句指明主键取得一条记录
+1）**GET，用 WHEN 子句指明主键取得一条记录**
 
 例句1，取指定字段，ON 子句用于指定配置：
 
@@ -28,7 +28,7 @@ GET fieldA,fieldB,fieldC.memb FROM table_name WHEN fieldA=@fieldA AND fieldB=@fi
 GET ALL FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON consistent=TRUE
 ```
 
-2）PUT，用 SET 子句指定各字段取值来提交一条记录
+2）**PUT，用 SET 子句指定各字段取值来提交一条记录**
 
 所指定的字段须包括主键，PUT 操作将覆盖原有记录，如果原记录存在的话。
 
@@ -44,7 +44,9 @@ PUT table_name SET fieldA=@fieldA,fieldB=@fieldB,fieldC=@fileldC ON return="ALL_
 PUT table_name SET fieldA=@fieldA,fieldB=@fieldB,fieldC=@fileldC WHERE attribute_exists(fieldD)
 ```
 
-3）UPDATE，用 SET 子句更新指定的字段，用 ADD 与 DEL 子句对指定集合做增、删，用 RMV 子句删除指定内容，比如删除字段或指定数组元素。
+3）**UPDATE，更新指定记录**
+
+用 SET 子句更新指定的字段，用 ADD 与 DEL 子句对指定集合做增、删，用 RMV 子句删除指定内容，比如删除字段或指定数组元素。
 
 UPDATE 常用来更新已存在的记录，须用 WHEN 子句指定主键。
 
@@ -72,7 +74,7 @@ UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ADD fieldG=@set1,fieldH
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB SET fieldC=fileldC+@count, fieldD=@fieldD WHERE fieldC<@count"
 ```
 
-4）DELETE，删除由 WHEN 子句指定主键的记录
+4）**DELETE，删除由 WHEN 子句指定主键的记录**
 
 例句：
 
@@ -80,7 +82,7 @@ UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB SET fieldC=fileldC+@cou
 DELETE FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON return="ALL_OLD"
 ```
 
-5）SELECT，查询符合条件的多条记录，由 WHERE 指定主键范围
+5）**SELECT，查询符合条件的多条记录，由 WHERE 指定主键范围**
 
 例句1，查询返回所有字段：
 
@@ -124,7 +126,7 @@ SELECT ALL FROM table_name BY DESC WHERE fieldA=@fieldA AND fieldB>@fieldB
 SELECT COUNT FROM table_name BY index_name WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-6）SCAN，遍历记录
+6）**SCAN，遍历记录**
 
 例句1，遍历并按指定条件过滤：
 
