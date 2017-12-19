@@ -26,14 +26,20 @@ testSet.test1 = function() {
       return;
     }
     console.log(data);
-  });
+  },true);
 };
 
 testSet.test2 = function() {
   var sql;
   sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=26 DEL mValue.aSet=@aSet ON return="ALL_NEW"');
   sql.log();
-  sql.process({':aSet':dynSql.newSet([3])});
+  sql.process({aSet:dynSql.newSet([3])}, function(err,data) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(data);
+  },true);
 };
 
 /*

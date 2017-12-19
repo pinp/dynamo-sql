@@ -8,16 +8,16 @@
 //
 // dynSql.init(AWS);
 //
-// var sql = dynSql.newSql('SELECT ALL FROM table_test WHERE sId="abcd" ON limit=20');
+// var sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=3 ADD mValue.aSet=@aSet ON return="ALL_NEW"');
 // sql.log();
 //
-// sql.process({':aSet':dynSql.createSet([1,2])}, function(err,data) {
+// sql.process({aSet:dynSql.newSet([1,2])}, function(err,data) {
 //   if (err) {
 //     console.log(err);
 //     return;
 //   }
 //   console.log(data);
-// });
+// },true);  // logCmd=true means printing parameters of dynamoDB API
 
 var yacc = require('./sql_yacc');
 
@@ -520,7 +520,7 @@ function defaultCallback_(err,data) {
 }
 
 dynSql.prototype = {
-  process: function(dCfg,callback) {
+  process: function(dCfg,callback,logCmd) {
     if (dCfg) {
       var dTmp = {};
       Object.keys(dCfg).forEach( function(sKey) {
@@ -548,6 +548,7 @@ dynSql.prototype = {
         if (d.consistent) params.ReturnConsumedCapacity = d.consistent;
       }
       
+      tryLogParam('get:',params);
       dynDC.get(params,callback || defaultCallback_);
     }
     else if (sAct == 'SELECT') {
@@ -568,6 +569,7 @@ dynSql.prototype = {
         if (d.last) params.ExclusiveStartKey = d.last; // from LastEvaluatedKey
       }
       
+      tryLogParam('select:',params);
       dynDC.query(params,callback || defaultCallback_);
     }
     else if (sAct == 'SCAN') {
@@ -591,6 +593,7 @@ dynSql.prototype = {
         if (d.segment) params.Segment = d.segment;
       }
       
+      tryLogParam('scan:',params);
       dynDC.scan(params,callback || defaultCallback_);
     }
     else if (sAct == 'PUT') {
@@ -616,6 +619,7 @@ dynSql.prototype = {
         if (sReturn) params.ReturnValues = sReturn;
       }
       
+      tryLogParam('put:',params);
       dynDC.put(params,callback || defaultCallback_);
     }
     else if (sAct == 'UPDATE') {
@@ -639,6 +643,7 @@ dynSql.prototype = {
         if (sReturn) params.ReturnValues = sReturn;
       }
       
+      tryLogParam('update:',params);
       dynDC.update(params,callback || defaultCallback_);
     }
     else if (sAct == 'DELETE') {
@@ -662,6 +667,7 @@ dynSql.prototype = {
         if (sReturn) params.ReturnValues = sReturn;
       }
       
+      tryLogParam('delete:',params);
       dynDC.delete(params,callback || defaultCallback_);
     }
     
@@ -702,6 +708,10 @@ dynSql.prototype = {
         }
       });
       return d;
+    }
+    
+    function tryLogParam(sPrefix,params) {
+      if (logCmd) console.log(sPrefix,JSON.stringify(params,null,2));
     }
   },
   

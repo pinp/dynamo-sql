@@ -1,135 +1,135 @@
 
-### About dynamo-sql
+### 关于 dynamo-sql
 
-<p style="width:100%; text-align:right"><a href="README_zh.md">中文</a></p>
-
-SQL like DSL suite layer for AWS dynamoDB.
+dynamo-sql 对 AWS dynamoDB 做封装，提供类 SQL 语法实现常规数据库操作。
 
 &nbsp;
 
-### SQL syntax
+### SQL 语法
 
-dynamo-sql supports following commands: GET, PUT, UPDATE, DELETE, SELECT, SCAN.
+dynamo-sql 支持 6 操作命令，包括：GET、PUT、UPDATE、DELETE、SELECT、SCAN。
 
-1) GET, Use WHEN clause to denote primary key when fetching a record
+各种操作的使用规则如下：
 
-Example 1: get specific fields under the configure of ON clause.
+1) GET，用 WHEN 子句指明主键取得一条记录
+
+例句1，取指定字段，ON 子句用于指定配置：
 
 ```
 GET fieldA,fieldB,fieldC.memb FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON consistent=TRUE
 ```
 
-Example 2: get all fields.
+例句2，取所有字段：
 
 ```
 GET ALL FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON consistent=TRUE
 ```
 
-2) PUT, Use SET clause to specify every field and commit a record
+2) PUT，用 SET 子句指定各字段取值来提交一条记录
 
-All fields should list in SET clause, the PUT operation will overwrite old record if there has one.
+所指定的字段须包括主键，PUT 操作将覆盖原有记录，如果原记录存在的话。
 
-Example 1: put a record.
+例句1，提交一条记录：
 
 ```
 PUT table_name SET fieldA=@fieldA,fieldB=@fieldB,fieldC=@fileldC ON return="ALL_OLD"
 ```
 
-Example 2: the record will be commited only when the condition in WHERE clause is satisfied.
+例句2，WHERE 子句判断条件是否满足，条件满足才提交记录：
 
 ```
 PUT table_name SET fieldA=@fieldA,fieldB=@fieldB,fieldC=@fileldC WHERE attribute_exists(fieldD)
 ```
 
-3) UPDATE, list all modifing field in SET clause, use ADD/DEL clause to add/delete a data set, use RMV clause to remove specific property, such as a field or member of array.
+3) UPDATE，用 SET 子句更新指定的字段，用 ADD 与 DEL 子句对指定集合做增、删，用 RMV 子句删除指定内容，比如删除字段或指定数组元素。
 
-WHEN clause always used to denote primary key in UPDATE command, and it normally used for updating an existed record.
+UPDATE 常用来更新已存在的记录，须用 WHEN 子句指定主键。
 
-Example 1: update some fields.
+例句1，更新指定字段：
 
 ```
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB SET fieldC=fileldC+@count, fieldD=@fieldD ON return="ALL_OLD"
 ```
 
-Example 2: remove property.
+例句2，删除指定内容：
 
 ```
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB RMV fieldE,fieldF[0] ON return="ALL_OLD"
 ```
 
-Example 3: add or delete data set.
+例句3，增删集合项目：
 
 ```
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ADD fieldG=@set1,fieldH.memb=@set2 DEL fieldH=@set3 ON return="ALL_NEW"
 ```
 
-Example 4: update under condition.
+例句4，条件更新：
 
 ```
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB SET fieldC=fileldC+@count, fieldD=@fieldD WHERE fieldC<@count"
 ```
 
-4) DELETE, delete a record which primary key specified by WHEN clause.
+4) DELETE，删除由 WHEN 子句指定主键的记录
 
-Example:
+例句：
 
 ```
 DELETE FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON return="ALL_OLD"
 ```
 
-5) SELECT, query records by given primary key range in WHERE clause.
+5) SELECT，查询符合条件的多条记录，由 WHERE 指定主键范围
 
-Example 1: query all fields.
+例句1，查询返回所有字段：
 
 ```
 SELECT ALL FROM table_name WHERE fieldA=@fieldA AND fieldB>@fieldB ON limit=20
 ```
 
-Example 2: query some fields.
+例句2，查询返回指定字段：
 
 ```
 SELECT fieldA,fieldB,filedC FROM table_name WHERE fieldA=@fieldA AND fieldB>@fieldB ON limit=20
 ```
 
-Example 3: add some filter condition.
+例句3，增加过滤条件：
 
 ```
 SELECT ALL FROM table_name WHERE fieldA=@fieldA AND fieldB>@fieldB FILTER fieldC=@fieldC
 ```
 
-Example 4: by index.
+例句4，指定索引：
 
 ```
 SELECT ALL FROM table_name BY index_name WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-Example 5: query in descend order.
+例句5，逆序查找：
 
 ```
 SELECT ALL FROM table_name BY index_name DESC WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-Or, use primary key with descend order.
+或使用主键逆序查找：
 
 ```
 SELECT ALL FROM table_name BY DESC WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-Example 6: only return record number.
+例句6，只返回记录数：
 
 ```
 SELECT COUNT FROM table_name BY index_name WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-6) SCAN, scan records
+6) SCAN，遍历记录
 
-Example 1: scan under filter condition.
+例句1，遍历并按指定条件过滤：
 
 ```
 SCAN ALL FROM table_name FILTER fieldC=@fieldC
 ```
 
-Example 2: by index.
+例句2，指定索引：
 
 ```
 SCAN fieldA,fieldB,fieldC FROM table_name BY index_name DESC ON last=@last,limit=20
@@ -137,9 +137,9 @@ SCAN fieldA,fieldB,fieldC FROM table_name BY index_name DESC ON last=@last,limit
 
 &nbsp;
 
-### Using API
+### 使用 API
 
-1) Import dynameDB SQL service layer
+1) 导入 SQL 服务层
 
 ``` js
 var AWS = require('aws-sdk');
@@ -150,14 +150,14 @@ var dynSql = require('dynamo-sql');
 dynSql.init(AWS);
 ```
 
-2) Create SQL service entity
+2) 创建 SQL 实体
 
 ``` js
 var sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=3 ADD mValue.aSet=@aSet ON return="ALL_NEW"');
 sql.log();   // print intermediate information
 ```
 
-3) Run SQL
+3) 执行 SQL
 
 ``` js
 sql.process({aSet:dynSql.newSet([1,2])}, function(err,data) {
