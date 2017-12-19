@@ -4,7 +4,9 @@
 
 ### About dynamo-sql
 
-SQL like DSL suite layer for AWS dynamoDB.
+dynamo-sql provides SQL like suite layer for AWS dynamoDB.
+
+There are two goals we want to achieve for this DSL (Domain Specific Language) encapsulation, one is simplify programming, and another, make cross-vendor and cross-system migration easier.
 
 &nbsp;
 
@@ -142,7 +144,14 @@ SCAN fieldA,fieldB,fieldC FROM table_name BY index_name DESC ON last=@last,limit
 
 ### Programming with API
 
-1）**Import dynameDB SQL service layer**
+1）**Install npm library**
+
+``` bash
+npm install --save aws-sdk
+npm install --save dynamo-sql
+```
+
+2）**Import dynameDB SQL service layer**
 
 ``` js
 var AWS = require('aws-sdk');
@@ -153,14 +162,14 @@ var dynSql = require('dynamo-sql');
 dynSql.init(AWS);
 ```
 
-2）**Create SQL service entity**
+3）**Create SQL service entity**
 
 ``` js
 var sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=3 ADD mValue.aSet=@aSet ON return="ALL_NEW"');
 sql.log();   // print intermediate information
 ```
 
-3）**Run SQL**
+4）**Run SQL**
 
 ``` js
 sql.process({aSet:dynSql.newSet([1,2])}, function(err,data) {

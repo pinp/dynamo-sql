@@ -4,7 +4,9 @@
 
 ### 关于 dynamo-sql
 
-dynamo-sql 对 AWS dynamoDB 做封装，提供类 SQL 语法实现常规数据库操作。
+本项目（dynamo-sql）对 AWS dynamoDB 做封装，提供类 SQL 语法实现常规数据库操作。
+
+我们封装 DSL（Domain Specific Language）脚本层是为了达成两个目标，一是简化应用，二是方便跨厂商、跨系统移植。
 
 &nbsp;
 
@@ -144,7 +146,14 @@ SCAN fieldA,fieldB,fieldC FROM table_name BY index_name DESC ON last=@last,limit
 
 ### 使用 API
 
-1）导入 SQL 服务层
+1）安装 npm 库
+
+``` bash
+npm install --save aws-sdk
+npm install --save dynamo-sql
+```
+
+2）导入 SQL 服务层
 
 ``` js
 var AWS = require('aws-sdk');
@@ -155,14 +164,14 @@ var dynSql = require('dynamo-sql');
 dynSql.init(AWS);
 ```
 
-2）创建 SQL 实体
+3）创建 SQL 实体
 
 ``` js
 var sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=3 ADD mValue.aSet=@aSet ON return="ALL_NEW"');
 sql.log();   // print intermediate information
 ```
 
-3）执行 SQL
+4）执行 SQL
 
 ``` js
 sql.process({aSet:dynSql.newSet([1,2])}, function(err,data) {
