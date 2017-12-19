@@ -1,7 +1,8 @@
+[查看中文版](README_zh.md)
+
+&nbsp;
 
 ### About dynamo-sql
-
-<p style="width:100%; text-align:right"><a href="README_zh.md">中文</a></p>
 
 SQL like DSL suite layer for AWS dynamoDB.
 
@@ -11,7 +12,7 @@ SQL like DSL suite layer for AWS dynamoDB.
 
 dynamo-sql supports following commands: GET, PUT, UPDATE, DELETE, SELECT, SCAN.
 
-1) GET, Use WHEN clause to denote primary key when fetching a record
+1）**GET, Use WHEN clause to denote primary key when fetching a record**
 
 Example 1: get specific fields under the configure of ON clause.
 
@@ -25,7 +26,7 @@ Example 2: get all fields.
 GET ALL FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON consistent=TRUE
 ```
 
-2) PUT, Use SET clause to specify every field and commit a record
+2）**PUT, Use SET clause to specify every field and commit a record**
 
 All fields should list in SET clause, the PUT operation will overwrite old record if there has one.
 
@@ -41,7 +42,9 @@ Example 2: the record will be commited only when the condition in WHERE clause i
 PUT table_name SET fieldA=@fieldA,fieldB=@fieldB,fieldC=@fileldC WHERE attribute_exists(fieldD)
 ```
 
-3) UPDATE, list all modifing field in SET clause, use ADD/DEL clause to add/delete a data set, use RMV clause to remove specific property, such as a field or member of array.
+3）**UPDATE, update a record**
+
+Use SET clause to modify some fields, use ADD/DEL clause to add/delete a data set, use RMV clause to remove specific property, such as a field or member of array.
 
 WHEN clause always used to denote primary key in UPDATE command, and it normally used for updating an existed record.
 
@@ -69,7 +72,7 @@ Example 4: update under condition.
 UPDATE table_name WHEN fieldA=@fieldA AND fieldB=@fieldB SET fieldC=fileldC+@count, fieldD=@fieldD WHERE fieldC<@count"
 ```
 
-4) DELETE, delete a record which primary key specified by WHEN clause.
+4）**DELETE, delete a record which primary key specified by WHEN clause**
 
 Example:
 
@@ -77,7 +80,7 @@ Example:
 DELETE FROM table_name WHEN fieldA=@fieldA AND fieldB=@fieldB ON return="ALL_OLD"
 ```
 
-5) SELECT, query records by given primary key range in WHERE clause.
+5）**SELECT, query records by given primary key range in WHERE clause**
 
 Example 1: query all fields.
 
@@ -121,7 +124,7 @@ Example 6: only return record number.
 SELECT COUNT FROM table_name BY index_name WHERE fieldA=@fieldA AND fieldB>@fieldB
 ```
 
-6) SCAN, scan records
+6）**SCAN, scan records**
 
 Example 1: scan under filter condition.
 
@@ -137,9 +140,9 @@ SCAN fieldA,fieldB,fieldC FROM table_name BY index_name DESC ON last=@last,limit
 
 &nbsp;
 
-### Using API
+### Programming with API
 
-1) Import dynameDB SQL service layer
+1）**Import dynameDB SQL service layer**
 
 ``` js
 var AWS = require('aws-sdk');
@@ -150,14 +153,14 @@ var dynSql = require('dynamo-sql');
 dynSql.init(AWS);
 ```
 
-2) Create SQL service entity
+2）**Create SQL service entity**
 
 ``` js
 var sql = dynSql.newSql('UPDATE table_test WHEN sId="abcd" AND nTime=3 ADD mValue.aSet=@aSet ON return="ALL_NEW"');
 sql.log();   // print intermediate information
 ```
 
-3) Run SQL
+3）**Run SQL**
 
 ``` js
 sql.process({aSet:dynSql.newSet([1,2])}, function(err,data) {
