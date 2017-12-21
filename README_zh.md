@@ -16,6 +16,8 @@ dynamo-sql 支持 6 操作命令，包括：GET、PUT、UPDATE、DELETE、SELECT
 
 [完整的 SQL 语法介绍请参考这篇文档](https://pinp.github.io/product-blogs/index.html?page=D171220-02.txt)
 
+&nbsp;
+
 各种操作的使用规则如下：
 
 1）**GET，用 WHEN 子句指明主键取得一条记录**
