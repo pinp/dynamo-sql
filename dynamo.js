@@ -179,7 +179,7 @@ function setupCondition_(condExpr,attrNames,attrValues,forKey,idxFrom) {
       var valueTok = condExpr[1], tokTp = valueTok[0];
       if (tokTp == 3) {    // TRUE or FALSE
         var sTok = ':' + valueTok[1];
-        attrValues[sTok] = (sTok == ':TRUE');
+        attrValues[sTok] = (sTok == ':TRUE'?1:0);
         sRet += ' ' + sTok;
       }
       else if (tokTp == 4) { // STRING
@@ -237,7 +237,7 @@ function setupOnList_(dRet,counter,attrValues,setList) {
       var valueTok = expr[1], tokTp = valueTok[0];
       if (tokTp == 3) {      // TRUE or FALSE
         var sTok = ':' + valueTok[1];
-        attrValues[sTok] = (sTok == ':TRUE');
+        attrValues[sTok] = (sTok == ':TRUE'?1:0);
         return sTok;
       }
       else if (tokTp == 4) { // STRING
@@ -266,7 +266,7 @@ function getRefValue_(counter,attrNames,attrValues,condExpr,canModi,isParam) {
     var valueTok = condExpr[1], tokTp = valueTok[0];
     if (tokTp == 3) {      // TRUE or FALSE
       var sTok = ':' + valueTok[1];
-      attrValues[sTok] = (sTok == ':TRUE');
+      attrValues[sTok] = (sTok == ':TRUE'?1:0);
       return sTok;
     }
     else if (tokTp == 4) { // STRING
@@ -545,7 +545,7 @@ dynSql.prototype = {
       if (this.onConfig) {
         var d = adjustOnConfig(this.onConfig,dCfg);
         if (d.capacity) params.ReturnConsumedCapacity = d.capacity;
-        if (d.consistent) params.ReturnConsumedCapacity = d.consistent;
+        if (d.consistent) params.ConsistentRead = !!d.consistent;
       }
       
       tryLogParam('get:',params);
@@ -564,7 +564,7 @@ dynSql.prototype = {
       if (this.onConfig) {
         var d = adjustOnConfig(this.onConfig,dCfg);
         if (d.capacity) params.ReturnConsumedCapacity = d.capacity;
-        if (d.consistent) params.ReturnConsumedCapacity = d.consistent;
+        if (d.consistent) params.ConsistentRead = !!d.consistent;
         if (d.limit) params.Limit = d.limit;
         if (d.last) params.ExclusiveStartKey = d.last; // from LastEvaluatedKey
       }
@@ -586,7 +586,7 @@ dynSql.prototype = {
       if (this.onConfig) {
         var d = adjustOnConfig(this.onConfig,dCfg);
         if (d.capacity) params.ReturnConsumedCapacity = d.capacity;
-        if (d.consistent) params.ReturnConsumedCapacity = d.consistent;
+        if (d.consistent) params.ConsistentRead = !!d.consistent;
         if (d.limit) params.Limit = d.limit;
         if (d.last) params.ExclusiveStartKey = d.last; // from LastEvaluatedKey
         if (d.segments) params.TotalSegments = d.segments;
