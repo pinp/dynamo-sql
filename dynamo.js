@@ -45,11 +45,11 @@ function scanNameList_(nameList,attrNames) {
   
   function scanName(tok) {
     var attrPath;
-    if (tok[0] == 112) {  // 112: name_list_2
+    if (tok[0] == 112) {  // 112: name_list_2 : name_list , attr_path
       scanName(tok[1]);
       attrPath = tok[3];
     }
-    else attrPath = tok[1];
+    else attrPath = tok[1];  // 111: name_list_1 : attr_path
     
     var sName = getAttrName_(attrPath);
     var sName2 = sName.replace(/[_A-Za-z](?:[_A-Za-z0-9]+)?/g, function(s) {
@@ -808,7 +808,7 @@ dynSql.newSql = function(sSql) {
       if (actType == 26)  // ALL COUNT
         ;  // do nothing  // default is ALL
       else {
-        var nameList = actType == 21? actClause[2]: actClause[3];
+        var nameList = actType == 24? actClause[2]: actClause[3];
         var bName = scanNameList_(nameList,attrNames);
         if (bName.length)
           params.ProjectionExpression = bName.join(',');
