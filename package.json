@@ -1,6 +1,6 @@
 {
   "name": "dynamo-sql",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "SQL like DSL suite layer for AWS dynamoDB",
   "main": "index.js",
   "scripts": {
